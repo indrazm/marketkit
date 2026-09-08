@@ -1,8 +1,2 @@
-import type { MarketDataProvider } from "@marketkit/core";
-
-export const finnhub: MarketDataProvider = {
-  name: "finnhub",
-  async getQuote(symbol) {
-    throw new Error(`finnhub: getQuote(${symbol}) not implemented`);
-  },
-};
+// Finnhub client lands here (PRD §6): class Finnhub over core transport.
+export const PROVIDER_NAME = "finnhub";

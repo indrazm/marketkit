@@ -1,8 +1,2 @@
-import type { MarketDataProvider } from "@marketkit/core";
-
-export const massive: MarketDataProvider = {
-  name: "massive",
-  async getQuote(symbol) {
-    throw new Error(`massive: getQuote(${symbol}) not implemented`);
-  },
-};
+// Massive client lands here (PRD §6): class Massive over core transport.
+export const PROVIDER_NAME = "massive";

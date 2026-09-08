@@ -1,8 +1,2 @@
-import type { MarketDataProvider } from "@marketkit/core";
-
-export const twelvedata: MarketDataProvider = {
-  name: "twelvedata",
-  async getQuote(symbol) {
-    throw new Error(`twelvedata: getQuote(${symbol}) not implemented`);
-  },
-};
+// Twelve Data client lands here (PRD §6): class TwelveData over core transport.
+export const PROVIDER_NAME = "twelvedata";

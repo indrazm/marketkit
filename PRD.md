@@ -44,10 +44,10 @@ Using Alpha Vantage directly means developers deal with things like:
 ```ts
 fetch(
   "https://www.alphavantage.co/query" +
-  "?function=TIME_SERIES_DAILY_ADJUSTED" +
-  "&symbol=AAPL" +
-  "&outputsize=compact" +
-  "&apikey=..."
+    "?function=TIME_SERIES_DAILY_ADJUSTED" +
+    "&symbol=AAPL" +
+    "&outputsize=compact" +
+    "&apikey=...",
 );
 ```
 
@@ -122,18 +122,18 @@ into:
 
 ```ts
 {
-  price: 239.12
+  price: 239.12;
 }
 ```
 
 **Predictable errors**
 
 ```ts
-MarketKitError
-AuthenticationError
-RateLimitError
-InvalidRequestError
-ProviderError
+MarketKitError;
+AuthenticationError;
+RateLimitError;
+InvalidRequestError;
+ProviderError;
 ```
 
 **Runtime independent where practical**
@@ -245,16 +245,16 @@ This is the important part.
 I'd organize around **financial domains**, not Alpha Vantage endpoint categories.
 
 ```ts
-market.stocks
-market.fundamentals
-market.news
-market.options
-market.forex
-market.crypto
-market.commodities
-market.economy
-market.indicators
-market.raw
+market.stocks;
+market.fundamentals;
+market.news;
+market.options;
+market.forex;
+market.crypto;
+market.commodities;
+market.economy;
+market.indicators;
+market.raw;
 ```
 
 IDE autocomplete therefore becomes documentation.
@@ -294,13 +294,13 @@ interface StockQuote {
 Notice:
 
 ```ts
-changePercent: number
+changePercent: number;
 ```
 
 not:
 
 ```ts
-changePercent: "1.2384%"
+changePercent: "1.2384%";
 ```
 
 Parsing belongs in the SDK.
@@ -314,19 +314,19 @@ This is where I would deliberately **hide Alpha Vantage's endpoint proliferation
 Instead of:
 
 ```ts
-daily()
-dailyAdjusted()
-weekly()
-weeklyAdjusted()
-monthly()
-monthlyAdjusted()
+daily();
+dailyAdjusted();
+weekly();
+weeklyAdjusted();
+monthly();
+monthlyAdjusted();
 ```
 
 provide:
 
 ```ts
 market.stocks.history("AAPL", {
-  interval: "1d"
+  interval: "1d",
 });
 ```
 
@@ -335,7 +335,7 @@ Adjusted:
 ```ts
 market.stocks.history("AAPL", {
   interval: "1d",
-  adjusted: true
+  adjusted: true,
 });
 ```
 
@@ -343,7 +343,7 @@ Intraday:
 
 ```ts
 market.stocks.history("AAPL", {
-  interval: "5m"
+  interval: "5m",
 });
 ```
 
@@ -351,7 +351,7 @@ Weekly:
 
 ```ts
 market.stocks.history("AAPL", {
-  interval: "1w"
+  interval: "1w",
 });
 ```
 
@@ -359,22 +359,14 @@ Monthly:
 
 ```ts
 market.stocks.history("AAPL", {
-  interval: "1mo"
+  interval: "1mo",
 });
 ```
 
 Type:
 
 ```ts
-type StockInterval =
-  | "1m"
-  | "5m"
-  | "15m"
-  | "30m"
-  | "60m"
-  | "1d"
-  | "1w"
-  | "1mo";
+type StockInterval = "1m" | "5m" | "15m" | "30m" | "60m" | "1d" | "1w" | "1mo";
 ```
 
 The adapter decides which Alpha Vantage function is necessary.
@@ -489,11 +481,7 @@ Alpha Vantage currently exposes realtime bulk quotes for up to 100 symbols in it
 MarketKit:
 
 ```ts
-await market.stocks.quotes([
-  "AAPL",
-  "MSFT",
-  "NVDA",
-]);
+await market.stocks.quotes(["AAPL", "MSFT", "NVDA"]);
 ```
 
 Not:
@@ -519,7 +507,7 @@ await market.market.status();
 I slightly prefer the latter if you're willing to introduce:
 
 ```ts
-market.market
+market.market;
 ```
 
 as another namespace.
@@ -632,7 +620,7 @@ market.indicators.tema()
 ...
 ```
 
-your *only* abstraction.
+your _only_ abstraction.
 
 I'd provide:
 
@@ -667,7 +655,7 @@ market.indicators.sma("AAPL", {
 But internally they all use:
 
 ```ts
-indicators.get()
+indicators.get();
 ```
 
 That gives you one extensible mechanism.
@@ -818,8 +806,7 @@ interface MarketResponse<T, M = ResponseMeta> {
 Example:
 
 ```ts
-const { data, meta } =
-  await market.stocks.quote("AAPL");
+const { data, meta } = await market.stocks.quote("AAPL");
 ```
 
 Generic metadata:
@@ -857,14 +844,14 @@ class MarketKitError extends Error {
 Then:
 
 ```ts
-AuthenticationError
-RateLimitError
-InvalidRequestError
-NotFoundError
-TimeoutError
-NetworkError
-ProviderError
-ParseError
+AuthenticationError;
+RateLimitError;
+InvalidRequestError;
+NotFoundError;
+TimeoutError;
+NetworkError;
+ProviderError;
+ParseError;
 ```
 
 Example:
@@ -930,7 +917,7 @@ Alpha Vantage requires quite a lot of response normalization anyway.
 Use:
 
 ```ts
-Date
+Date;
 ```
 
 in returned runtime objects.
@@ -938,7 +925,7 @@ in returned runtime objects.
 Accept both:
 
 ```ts
-Date | string
+Date | string;
 ```
 
 for inputs where appropriate.
@@ -958,7 +945,7 @@ Don't introduce Temporal as a hard requirement yet.
 Return actual:
 
 ```ts
-number
+number;
 ```
 
 for prices and percentages.
@@ -1007,7 +994,7 @@ new AlphaVantage({
 Default:
 
 ```ts
-globalThis.fetch
+globalThis.fetch;
 ```
 
 This makes testing dramatically easier and supports unusual runtimes.
@@ -1119,4 +1106,3 @@ console.log(
 
 [1]: https://github.com/alphavantage/alpha_vantage_mcp?utm_source=chatgpt.com "GitHub - alphavantage/alpha_vantage_mcp: Alpha Vantage MCP Server · GitHub"
 [2]: https://www.alphavantage.co/documentation/?utm_source=chatgpt.com "API Documentation | Alpha Vantage"
-

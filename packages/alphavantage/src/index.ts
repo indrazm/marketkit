@@ -1,8 +1,2 @@
-import type { MarketDataProvider } from "@marketkit/core";
-
-export const alphavantage: MarketDataProvider = {
-  name: "alphavantage",
-  async getQuote(symbol) {
-    throw new Error(`alphavantage: getQuote(${symbol}) not implemented`);
-  },
-};
+// Alpha Vantage client lands here (PRD §6): class AlphaVantage over core transport.
+export const PROVIDER_NAME = "alphavantage";
