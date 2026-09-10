@@ -6,12 +6,12 @@ A type-safe, ergonomic TypeScript SDK for financial market data, designed provid
 
 ## Packages
 
-| Package                                                             | Status                                                                                                     |
-| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `@marketkit/core`                                                   | Transport (fetch injection, timeouts, abort, retries), error hierarchy, response envelope, parsing helpers |
-| `@marketkit/alphavantage`                                           | Planned — Alpha Vantage client                                                                             |
-| `@marketkit/twelvedata`, `@marketkit/finnhub`, `@marketkit/massive` | Planned                                                                                                    |
-| `@marketkit/mcp`                                                    | Planned — MCP server                                                                                       |
+| Package                                                             | Status                                                                                                                                                                    |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@marketkit/core`                                                   | Transport (fetch injection, timeouts, abort, retries), error hierarchy, response envelope, parsing helpers                                                                |
+| `@marketkit/alphavantage`                                           | Alpha Vantage client — `stocks`, `indexes`, `fundamentals`, `news`, `intelligence`, `indicators`, `forex`, `crypto`, `options`, `commodities`, `economy`, `market`, `raw` |
+| `@marketkit/twelvedata`, `@marketkit/finnhub`, `@marketkit/massive` | Planned                                                                                                                                                                   |
+| `@marketkit/mcp`                                                    | Planned — MCP server                                                                                                                                                      |
 
 Nothing is published to npm yet. The repository is a pnpm workspace; clone and build locally:
 
@@ -28,8 +28,8 @@ pnpm lint
 
 ## Design
 
-- ESM-first, tree-shakeable, no runtime dependencies in core.
-- Domain-oriented API (planned): `market.stocks.quote(...)`, `market.stocks.history(...)`, `market.raw.request(...)` — provider function names stay out of the public surface.
+- ESM-only (no CommonJS builds), tree-shakeable, no runtime dependencies in core.
+- Domain-oriented API: `market.stocks.quote(...)`, `market.stocks.history(...)`, `market.raw.request(...)` — provider function names stay out of the public surface.
 - Predictable errors: everything derives from `MarketKitError` (`AuthenticationError`, `RateLimitError`, `InvalidRequestError`, `NotFoundError`, `TimeoutError`, `NetworkError`, `ProviderError`, `ParseError`).
 - Responses come as a `MarketResponse { data, meta }` envelope with `provider` and `fetchedAt` metadata.
 - Numeric strings from providers are parsed into real `number`s; dates come back as `Date`.
