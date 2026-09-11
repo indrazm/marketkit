@@ -302,26 +302,26 @@ export class StocksNamespace {
     );
   }
 
-  /** `/v3/reference/tickers/{id}/events` — ticker change timeline. */
+  /** `/vX/reference/tickers/{id}/events` — ticker change timeline (`vX` is literal). */
   async tickerEvents(
     id: string,
     options?: RequestOptions & { types?: string },
   ): Promise<MarketResponse<LooseData, AggsMeta>> {
     const payload = await this.api.get<unknown>(
-      `v3/reference/tickers/${encodeURIComponent(id)}/events`,
+      `vX/reference/tickers/${encodeURIComponent(id)}/events`,
       { types: options?.types },
       options,
     );
     return envelope(deepNumeric(payload) as LooseData, meta(payload));
   }
 
-  /** `/v3/reference/ipos` — IPO calendar (since 2008). */
+  /** `/vX/reference/ipos` — IPO calendar (since 2008; `vX` is literal). */
   async ipos(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
     const { signal, ...params } = options;
     const payload = await this.api.get<unknown>(
-      "v3/reference/ipos",
+      "vX/reference/ipos",
       params,
       signal ? { signal } : undefined,
     );
@@ -371,11 +371,11 @@ export class StocksNamespace {
     return this.financials("stocks/financials/v1/ratios", options);
   }
 
-  /** `GET /stocks/v1/float` — free float. */
+  /** `GET /stocks/vX/float` — free float (`vX` is literal per docs). */
   async float(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
-    return this.financials("stocks/v1/float", options);
+    return this.financials("stocks/vX/float", options);
   }
 
   /** `GET /stocks/v1/short-interest`. */
@@ -392,11 +392,11 @@ export class StocksNamespace {
     return this.financials("stocks/v1/short-volume", options);
   }
 
-  /** `GET /stocks/filings/v1/index` — SEC EDGAR master index. */
+  /** `GET /stocks/filings/vX/index` — SEC EDGAR master index (`vX` is literal). */
   async filingsIndex(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
-    return this.financials("stocks/filings/v1/index", options);
+    return this.financials("stocks/filings/vX/index", options);
   }
 
   /** SEC filing content passthrough (`10-k-sections`, `8-k-text`, `form-4`, ...). */
@@ -405,7 +405,7 @@ export class StocksNamespace {
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
     return this.financials(
-      `stocks/filings/v1/${path.replace(/^stocks\/filings\/v1\//, "")}`,
+      `stocks/filings/vX/${path.replace(/^stocks\/filings\/vX\//, "")}`,
       options,
     );
   }

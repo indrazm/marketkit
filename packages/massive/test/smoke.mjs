@@ -265,7 +265,11 @@ ok(
   (await market.stocks.balanceSheets({ tickers: "AAPL" })).data[0].total_assets === 100,
 );
 responses.push({ status: "OK", results: [{ ticker: "AAPL", free_float: 5 }] });
-ok("float", (await market.stocks.float({ ticker: "AAPL" })).data[0].free_float === 5);
+ok(
+  "float",
+  (await market.stocks.float({ ticker: "AAPL" })).data[0].free_float === 5 &&
+    calls.at(-1).includes("stocks/vX/float"),
+);
 responses.push({ status: "OK", results: [{ ticker: "AAPL", short_interest: 7 }] });
 ok(
   "shortInterest",
@@ -274,10 +278,24 @@ ok(
 responses.push({ status: "OK", results: [{ accession_number: "x", form_type: "10-K" }] });
 ok(
   "filingsIndex",
-  (await market.stocks.filingsIndex({ ticker: "AAPL" })).data[0].form_type === "10-K",
+  (await market.stocks.filingsIndex({ ticker: "AAPL" })).data[0].form_type === "10-K" &&
+    calls.at(-1).includes("stocks/filings/vX/index"),
 );
 responses.push({ status: "OK", results: [{ ticker: "RAPP", ipo_status: "history" }] });
-ok("ipos", (await market.stocks.ipos()).data[0].ticker === "RAPP");
+ok(
+  "ipos",
+  (await market.stocks.ipos()).data[0].ticker === "RAPP" &&
+    calls.at(-1).includes("vX/reference/ipos"),
+);
+responses.push({
+  status: "OK",
+  results: { name: "Meta Platforms, Inc.", events: [{ type: "ticker_change" }] },
+});
+ok(
+  "tickerEvents",
+  (await market.stocks.tickerEvents("META")).data.results.name === "Meta Platforms, Inc." &&
+    calls.at(-1).includes("vX/reference/tickers/META/events"),
+);
 responses.push({ status: "OK", results: [{ ticker: "O:AAPL1", contract_type: "call" }] });
 ok(
   "options.contracts",
