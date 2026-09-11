@@ -243,7 +243,7 @@ responses.push({ status: "OK", results: [{ date: "2026-09-01", value: 4.2 }] });
 const ty = await market.economy.get("treasury-yields", { limit: 10 });
 ok(
   "economy passthrough",
-  ty.data.results[0].value === 4.2 && calls.at(-1).includes("v1/economy/treasury-yields"),
+  ty.data.results[0].value === 4.2 && calls.at(-1).includes("fed/v1/treasury-yields"),
 );
 
 // 13b. expanded REST coverage
@@ -300,8 +300,60 @@ responses.push({ status: "OK", results: [{ product_code: "ES" }] });
 ok("futures.products", (await market.futures.products()).data[0].product_code === "ES");
 responses.push({ status: "OK", results: [{ date: "2026-09-01" }] });
 ok("economy.treasuryYields", (await market.economy.treasuryYields()).data[0].date === "2026-09-01");
+responses.push({ status: "OK", results: [{ date: "2025-06-01", cpi: 310.45 }] });
+ok(
+  "economy.inflation",
+  (await market.economy.inflation()).data[0].cpi === 310.45 &&
+    calls.at(-1).includes("fed/v1/inflation"),
+);
 responses.push({ status: "OK", results: [{ title: "n" }] });
-ok("partners.benzingaNews", (await market.partners.benzingaNews()).data[0].title === "n");
+ok(
+  "partners.benzingaNews",
+  (await market.partners.benzingaNews()).data[0].title === "n" &&
+    calls.at(-1).includes("benzinga/v2/news"),
+);
+responses.push({ status: "OK", results: [{ ticker: "RIVN", rating: "neutral" }] });
+ok(
+  "partners.benzingaRatings",
+  (await market.partners.benzingaRatings()).data[0].ticker === "RIVN" &&
+    calls.at(-1).includes("benzinga/v1/ratings"),
+);
+responses.push({ status: "OK", results: [{ ticker: "AAPL", consensus_rating: "hold" }] });
+ok(
+  "partners.consensusRatings",
+  (await market.partners.benzingaConsensusRatings("AAPL")).data[0].consensus_rating === "hold" &&
+    calls.at(-1).includes("benzinga/v1/consensus-ratings/AAPL"),
+);
+responses.push({ status: "OK", results: [{ composite_ticker: "SPY", quant_grade: "D" }] });
+ok(
+  "partners.etfConstituents",
+  (await market.partners.etfConstituents({ composite_ticker: "SPY" })).data[0].composite_ticker ===
+    "SPY" && calls.at(-1).includes("etf-global/v1/constituents"),
+);
+responses.push({ status: "OK", results: [{ ticker: "ROL", type: "earnings_announcement_date" }] });
+ok(
+  "partners.corporateEvents",
+  (await market.partners.corporateEvents()).data[0].ticker === "ROL" &&
+    calls.at(-1).includes("tmx/v1/corporate-events"),
+);
+responses.push({ status: "OK", results: [{ name: "zumba fitness", total_spend: -3 }] });
+ok(
+  "alternative.merchantAggregates",
+  (await market.alternative.merchantAggregates()).data[0].name === "zumba fitness" &&
+    calls.at(-1).includes("consumer-spending/eu/v1/merchant-aggregates"),
+);
+responses.push({ status: "OK", results: [{ acronym: "CME", mic: "XCME" }] });
+ok(
+  "futures.exchanges",
+  (await market.futures.exchanges()).data[0].acronym === "CME" &&
+    calls.at(-1).includes("futures/v1/exchanges"),
+);
+responses.push({ status: "OK", symbol: "BTC-USD", open: 10932.44, close: 11050.64 });
+ok(
+  "crypto.dailyOpenClose",
+  (await market.crypto.dailyOpenClose("BTC", "USD", "2020-10-09")).data.close === 11050.64 &&
+    calls.at(-1).includes("v1/open-close/crypto/BTC/USD/2020-10-09"),
+);
 
 // 14. error mapping: 401 + 429 retry
 responses.push([401, { status: "ERROR", message: "not authorized" }]);

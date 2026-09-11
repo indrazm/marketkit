@@ -519,6 +519,21 @@ export class CryptoNamespace {
     );
     return envelope(parseAggBars(payload), meta(payload));
   }
+
+  /** `/v1/open-close/crypto/{from}/{to}/{date}` — daily crypto summary. */
+  async dailyOpenClose(
+    from: string,
+    to: string,
+    date: string,
+    options?: RequestOptions & { adjusted?: boolean },
+  ): Promise<MarketResponse<LooseData, AggsMeta>> {
+    const payload = await this.api.get<unknown>(
+      `v1/open-close/crypto/${encodeURIComponent(from.toUpperCase())}/${encodeURIComponent(to.toUpperCase())}/${encodeURIComponent(date)}`,
+      { adjusted: options?.adjusted },
+      options,
+    );
+    return envelope(deepNumeric(payload) as LooseData, meta(payload));
+  }
 }
 
 export class IndicesNamespace {
@@ -626,14 +641,14 @@ export class IndicatorsNamespace {
 export class EconomyNamespace {
   constructor(private readonly api: MassiveApi) {}
 
-  /** Economy endpoints (treasury yields, inflation, labor market, ...). */
+  /** Economy endpoints (`GET /fed/v1/...`: treasury yields, inflation, ...). */
   async get<T = LooseData>(
     path: string,
     params: Record<string, string | number | boolean | undefined> = {},
     options?: RequestOptions,
   ): Promise<MarketResponse<T, AggsMeta>> {
     const payload = await this.api.get<unknown>(
-      `v1/economy/${path.replace(/^v1\/economy\//, "")}`,
+      `fed/v1/${path.replace(/^(fed\/v1\/|v1\/economy\/)/, "")}`,
       params,
       options,
     );
@@ -653,35 +668,35 @@ export class EconomyNamespace {
     });
   }
 
-  /** `GET /v1/economy/treasury-yields`. */
+  /** `GET /fed/v1/treasury-yields`. */
   async treasuryYields(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
     return this.list("treasury-yields", options);
   }
 
-  /** `GET /v1/economy/inflation`. */
+  /** `GET /fed/v1/inflation`. */
   async inflation(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
     return this.list("inflation", options);
   }
 
-  /** `GET /v1/economy/inflation-expectations`. */
+  /** `GET /fed/v1/inflation-expectations`. */
   async inflationExpectations(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
     return this.list("inflation-expectations", options);
   }
 
-  /** `GET /v1/economy/labor-market`. */
+  /** `GET /fed/v1/labor-market`. */
   async laborMarket(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
     return this.list("labor-market", options);
   }
 
-  /** `GET /v1/economy/funding-conditions`. */
+  /** `GET /fed/v1/funding-conditions`. */
   async fundingConditions(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
@@ -735,6 +750,13 @@ export class FuturesNamespace {
     return this.list("futures/v1/snapshot", options);
   }
 
+  /** `GET /futures/v1/exchanges` — supported futures exchanges. */
+  async exchanges(
+    options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
+  ): Promise<MarketResponse<LooseData[], AggsMeta>> {
+    return this.list("futures/v1/exchanges", options);
+  }
+
   /** Futures aggregates via the shared aggs tape. */
   async aggs(ticker: string, options: AggsOptions): Promise<MarketResponse<AggBar[], AggsMeta>> {
     const payload = await this.api.get<unknown>(
@@ -780,48 +802,137 @@ export class PartnersNamespace {
     );
   }
 
-  /** Benzinga passthrough (`news`, `earnings`, `analyst-ratings`, ...). */
+  /** Benzinga passthrough (`v1/earnings`, `v2/news`, `v1/ratings`, ...). */
   async benzinga(
     path: string,
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
-    return this.list(`v1/benzinga/${path.replace(/^v1\/benzinga\//, "")}`, options);
+    return this.list(`benzinga/${path.replace(/^benzinga\//, "")}`, options);
   }
 
-  /** `GET /v1/benzinga/news` — real-time Benzinga news. */
+  /** `GET /benzinga/v2/news` — real-time Benzinga news. */
   async benzingaNews(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
-    return this.benzinga("news", options);
+    return this.benzinga("v2/news", options);
   }
 
-  /** `GET /v1/benzinga/earnings` — earnings announcements. */
+  /** `GET /benzinga/v1/earnings` — earnings announcements. */
   async benzingaEarnings(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
-    return this.benzinga("earnings", options);
+    return this.benzinga("v1/earnings", options);
   }
 
-  /** `GET /v1/benzinga/analyst-ratings` — analyst ratings. */
+  /** `GET /benzinga/v1/ratings` — analyst ratings. */
   async benzingaRatings(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
-    return this.benzinga("analyst-ratings", options);
+    return this.benzinga("v1/ratings", options);
   }
 
-  /** ETF Global passthrough (`analytics`, `constituents`, `fundflows`, ...). */
+  /** `GET /benzinga/v1/analysts` — analyst details/performance. */
+  async benzingaAnalysts(
+    options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
+  ): Promise<MarketResponse<LooseData[], AggsMeta>> {
+    return this.benzinga("v1/analysts", options);
+  }
+
+  /** `GET /benzinga/v1/firms` — analyst firm details. */
+  async benzingaFirms(
+    options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
+  ): Promise<MarketResponse<LooseData[], AggsMeta>> {
+    return this.benzinga("v1/firms", options);
+  }
+
+  /** `GET /benzinga/v1/guidance` — corporate earnings guidance. */
+  async benzingaGuidance(
+    options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
+  ): Promise<MarketResponse<LooseData[], AggsMeta>> {
+    return this.benzinga("v1/guidance", options);
+  }
+
+  /** `GET /benzinga/v1/analyst-insights` — analyst insights. */
+  async benzingaAnalystInsights(
+    options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
+  ): Promise<MarketResponse<LooseData[], AggsMeta>> {
+    return this.benzinga("v1/analyst-insights", options);
+  }
+
+  /** `GET /benzinga/v1/bulls-bears-say` — bull/bear case summaries. */
+  async benzingaBullsBearsSay(
+    options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
+  ): Promise<MarketResponse<LooseData[], AggsMeta>> {
+    return this.benzinga("v1/bulls-bears-say", options);
+  }
+
+  /** `GET /benzinga/v1/consensus-ratings/{ticker}` — consensus ratings. */
+  async benzingaConsensusRatings(
+    ticker: string,
+    options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
+  ): Promise<MarketResponse<LooseData[], AggsMeta>> {
+    const { signal, ...params } = options;
+    const payload = await this.api.get<unknown>(
+      `benzinga/v1/consensus-ratings/${encodeURIComponent(ticker)}`,
+      params,
+      signal ? { signal } : undefined,
+    );
+    return envelope(
+      (((payload as { results?: unknown }).results as unknown[] | undefined) ?? []).map(
+        (row) => deepNumeric(row) as LooseData,
+      ),
+      meta(payload),
+    );
+  }
+
+  /** ETF Global passthrough (`v1/analytics`, `v1/constituents`, ...). */
   async etfGlobal(
     path: string,
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
-    return this.list(`v1/etf-global/${path.replace(/^v1\/etf-global\//, "")}`, options);
+    return this.list(`etf-global/${path.replace(/^etf-global\//, "")}`, options);
   }
 
-  /** TMX / Wall Street Horizon corporate events. */
+  /** `GET /etf-global/v1/analytics` — ETF performance/risk analytics. */
+  async etfAnalytics(
+    options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
+  ): Promise<MarketResponse<LooseData[], AggsMeta>> {
+    return this.etfGlobal("v1/analytics", options);
+  }
+
+  /** `GET /etf-global/v1/constituents` — ETF holdings. */
+  async etfConstituents(
+    options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
+  ): Promise<MarketResponse<LooseData[], AggsMeta>> {
+    return this.etfGlobal("v1/constituents", options);
+  }
+
+  /** `GET /etf-global/v1/fundflows` — ETF capital flows. */
+  async etfFundFlows(
+    options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
+  ): Promise<MarketResponse<LooseData[], AggsMeta>> {
+    return this.etfGlobal("v1/fundflows", options);
+  }
+
+  /** `GET /etf-global/v1/profiles` — ETF profiles & exposure. */
+  async etfProfiles(
+    options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
+  ): Promise<MarketResponse<LooseData[], AggsMeta>> {
+    return this.etfGlobal("v1/profiles", options);
+  }
+
+  /** `GET /etf-global/v1/taxonomies` — ETF taxonomy systems. */
+  async etfTaxonomies(
+    options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
+  ): Promise<MarketResponse<LooseData[], AggsMeta>> {
+    return this.etfGlobal("v1/taxonomies", options);
+  }
+
+  /** `GET /tmx/v1/corporate-events` — Wall Street Horizon events. */
   async corporateEvents(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
-    return this.list("v1/tmx/corporate-events", options);
+    return this.list("tmx/v1/corporate-events", options);
   }
 }
 
@@ -843,17 +954,17 @@ export class AlternativeNamespace {
     );
   }
 
-  /** Fable merchant spending aggregates. */
+  /** `GET /consumer-spending/eu/v1/merchant-aggregates` — Fable spending. */
   async merchantAggregates(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
-    return this.list("v1/alternative/merchant-aggregates", options);
+    return this.list("consumer-spending/eu/v1/merchant-aggregates", options);
   }
 
-  /** Fable merchant hierarchy reference. */
+  /** `GET /consumer-spending/eu/v1/merchant-hierarchy` — merchant reference. */
   async merchantHierarchy(
     options: Record<string, string | number | boolean | undefined> & RequestOptions = {},
   ): Promise<MarketResponse<LooseData[], AggsMeta>> {
-    return this.list("v1/alternative/merchant-hierarchy", options);
+    return this.list("consumer-spending/eu/v1/merchant-hierarchy", options);
   }
 }
