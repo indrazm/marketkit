@@ -6,12 +6,14 @@ A type-safe, ergonomic TypeScript SDK for financial market data, designed provid
 
 ## Packages
 
-| Package                                                             | Status                                                                                                                                                                    |
-| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@marketkit/core`                                                   | Transport (fetch injection, timeouts, abort, retries), error hierarchy, response envelope, parsing helpers                                                                |
-| `@marketkit/alphavantage`                                           | Alpha Vantage client — `stocks`, `indexes`, `fundamentals`, `news`, `intelligence`, `indicators`, `forex`, `crypto`, `options`, `commodities`, `economy`, `market`, `raw` |
-| `@marketkit/twelvedata`, `@marketkit/finnhub`, `@marketkit/massive` | Planned                                                                                                                                                                   |
-| `@marketkit/mcp`                                                    | Planned — MCP server                                                                                                                                                      |
+| Package                   | Status                                                                                                                                                                    |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@marketkit/core`         | Transport (fetch injection, timeouts, abort, retries), error hierarchy, response envelope, parsing helpers                                                                |
+| `@marketkit/alphavantage` | Alpha Vantage client — `stocks`, `indexes`, `fundamentals`, `news`, `intelligence`, `indicators`, `forex`, `crypto`, `options`, `commodities`, `economy`, `market`, `raw` |
+| `@marketkit/twelvedata`   | Twelve Data client — `stocks`, `fundamentals`, `indicators`, `forex`, `crypto`, `etf`, `indices`, `exchanges`, `market`, `raw`                                            |
+| `@marketkit/finnhub`      | Finnhub client — `stocks`, `fundamentals`, `news`, `forex`, `crypto`, `indices`, `etf`, `market`, `raw`                                                                   |
+| `@marketkit/massive`      | Massive client — `stocks`, `reference`, `market`, `options`, `forex`, `crypto`, `indices`, `indicators`, `economy`, `futures`, `partners`, `alternative`, `raw`           |
+| `@marketkit/mcp`          | Planned — MCP server                                                                                                                                                      |
 
 Nothing is published to npm yet. The repository is a pnpm workspace; clone and build locally:
 
