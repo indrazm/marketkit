@@ -58,6 +58,7 @@ export class FundamentalsNamespace {
     );
     return {
       data: {
+        ...data,
         marketCap: rawValue((data.price as Record<string, unknown> | undefined)?.marketCap),
         trailingPE: rawValue(
           (data.summaryDetail as Record<string, unknown> | undefined)?.trailingPE,
@@ -67,7 +68,6 @@ export class FundamentalsNamespace {
           (data.summaryDetail as Record<string, unknown> | undefined)?.dividendYield,
         ),
         beta: rawValue((data.defaultKeyStatistics as Record<string, unknown> | undefined)?.beta),
-        ...data,
       } as LooseData,
       meta: m,
     };
@@ -145,6 +145,7 @@ export class FundamentalsNamespace {
     const events = (data.calendarEvents ?? {}) as Record<string, unknown>;
     return {
       data: {
+        ...data,
         earningsDate:
           rawDate(events.earningsDate) ??
           (Array.isArray(events.earningsDate)
@@ -152,7 +153,6 @@ export class FundamentalsNamespace {
             : undefined),
         exDividendDate: rawDate(events.exDividendDate),
         dividendDate: rawDate(events.dividendDate),
-        ...data,
       } as LooseData,
       meta: m,
     };

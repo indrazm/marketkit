@@ -5,7 +5,7 @@
  * already clean) and numeric strings coerced.
  */
 
-import { MarketResponse, ParseError, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, ParseError, type RequestOptions } from "@marketkit/core";
 
 import { type TwelveDataApi } from "./api.js";
 import type {

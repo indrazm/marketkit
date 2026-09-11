@@ -58,6 +58,25 @@ export function envelope<T>(data: T, metaObj: MassiveMetaLite): { data: T; meta:
   return { data, meta: metaObj };
 }
 
+/** Shared envelope meta extractor — one copy used by every namespace. */
+export function meta(payload: unknown): MassiveMetaLite {
+  const record = (payload ?? {}) as Record<string, unknown>;
+  return {
+    provider: "massive",
+    fetchedAt: new Date(),
+    requestId: typeof record.request_id === "string" ? record.request_id : undefined,
+    status: typeof record.status === "string" ? record.status : undefined,
+    count: typeof record.count === "number" ? record.count : undefined,
+    nextUrl: typeof record.next_url === "string" ? record.next_url : undefined,
+  };
+}
+
+/** Lenient `results` array extraction (missing → empty, never throws). */
+export function resultsOf(payload: unknown): unknown[] {
+  const rows = (payload as { results?: unknown }).results;
+  return Array.isArray(rows) ? rows : [];
+}
+
 /** `results` array extraction. */
 export function requireResults(payload: unknown, context: string): unknown[] {
   const record = isRecord(payload) ? payload : {};

@@ -4,10 +4,17 @@
  * helpers delegate to `get`.
  */
 
-import { MarketResponse, ParseError } from "@marketkit/core";
+import { type MarketResponse, ParseError } from "@marketkit/core";
 
 import { type TwelveDataApi } from "./api.js";
-import { type TwelveDataMetaFields, envelope, parseMeta } from "./normalize.js";
+import {
+  describe,
+  envelope,
+  parseMeta,
+  parseTimestamp,
+  requireRecord,
+  type TwelveDataMetaFields,
+} from "./normalize.js";
 import type {
   AroonPoint,
   BbandsPoint,
@@ -21,7 +28,6 @@ import type {
   MacdPoint,
   StochPoint,
 } from "./types.js";
-import { describe, parseTimestamp, requireRecord } from "./normalize.js";
 
 /** Indicators whose rows carry multiple named values. */
 type AnyShapedPoint =

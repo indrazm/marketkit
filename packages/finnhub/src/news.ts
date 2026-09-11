@@ -1,10 +1,12 @@
 /** News domain: market news, company news, sentiment, press releases. */
 
-import { MarketResponse, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, type RequestOptions } from "@marketkit/core";
 
-import { envelope, FinnhubApi, meta, parseTimestamp } from "./api.js";
+import { envelope, meta, parseTimestamp, type FinnhubApi } from "./api.js";
 import type { LooseData, NewsArticle, NewsSentimentBuzz } from "./types.js";
 import { deepNumeric } from "./shared.js";
+
+type Meta = { provider: "finnhub"; fetchedAt: Date };
 
 function parseArticle(row: unknown): NewsArticle {
   const r = deepNumeric(row) as Record<string, unknown>;
@@ -28,7 +30,7 @@ export class NewsNamespace {
   async marketNews(
     category: "general" | "forex" | "crypto" | "merger",
     options?: RequestOptions,
-  ): Promise<MarketResponse<NewsArticle[], LooseMeta2>> {
+  ): Promise<MarketResponse<NewsArticle[], Meta>> {
     const payload = await this.api.get("news", { category }, options);
     const rows = Array.isArray(payload) ? payload : [];
     return envelope(rows.map(parseArticle), meta());
@@ -38,7 +40,7 @@ export class NewsNamespace {
   async companyNews(
     symbol: string,
     options: { from: string; to: string } & RequestOptions,
-  ): Promise<MarketResponse<NewsArticle[], LooseMeta2>> {
+  ): Promise<MarketResponse<NewsArticle[], Meta>> {
     const payload = await this.api.get(
       "company-news",
       { symbol, from: options.from, to: options.to },
@@ -52,7 +54,7 @@ export class NewsNamespace {
   async sentiment(
     symbol: string,
     options?: RequestOptions,
-  ): Promise<MarketResponse<NewsSentimentBuzz, LooseMeta2>> {
+  ): Promise<MarketResponse<NewsSentimentBuzz, Meta>> {
     const payload = await this.api.get("news-sentiment", { symbol }, options);
     return envelope(deepNumeric(payload) as NewsSentimentBuzz, meta());
   }
@@ -61,7 +63,7 @@ export class NewsNamespace {
   async pressReleases(
     symbol: string,
     options?: RequestOptions,
-  ): Promise<MarketResponse<LooseData[], LooseMeta2>> {
+  ): Promise<MarketResponse<LooseData[], Meta>> {
     const payload = await this.api.get("press-releases", { symbol }, options);
     const rows = (payload as { majorDevelopment?: unknown[] }).majorDevelopment ?? [];
     return envelope(
@@ -70,5 +72,3 @@ export class NewsNamespace {
     );
   }
 }
-
-type LooseMeta2 = { provider: "finnhub"; fetchedAt: Date };

@@ -6,7 +6,10 @@
 
 import { NotFoundError, ParseError, type ResponseMeta } from "@marketkit/core";
 
-import { isRecord } from "./api.js";
+/** Structural object check shared by parsers. */
+export function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
 
 export function describe(value: unknown): string {
   const text = typeof value === "string" ? JSON.stringify(value) : String(value);

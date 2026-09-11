@@ -2,9 +2,9 @@
  * PRD §19–§20: options chains and the raw escape hatch.
  */
 
-import { MarketResponse, ParseError, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, ParseError, type RequestOptions } from "@marketkit/core";
 
-import { AlphaVantageApi, AlphaVantageMetaFields, envelope, parseMeta } from "./api.js";
+import { type AlphaVantageApi, type AlphaVantageMetaFields, envelope, parseMeta } from "./api.js";
 import type {
   OptionContract,
   OptionRatio,

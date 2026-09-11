@@ -10,6 +10,11 @@ import type { DateString, ResponseMeta } from "@marketkit/core";
 /** PRD §9: one interval type instead of six endpoint methods. */
 export type StockInterval = "1m" | "5m" | "15m" | "30m" | "60m" | "1d" | "1w" | "1mo";
 
+/** Internal: request-level options shared by every method. */
+export interface RequestOptionsShape {
+  signal?: AbortSignal;
+}
+
 export interface HistoryOptions extends RequestOptionsShape {
   interval: StockInterval;
   /** Adjusted closes/dividends/splits where the provider supports them. For
@@ -23,11 +28,6 @@ export interface HistoryOptions extends RequestOptionsShape {
   month?: `${number}-${number}`;
   /** Premium data freshness control (intraday and quotes). */
   entitlement?: Entitlement;
-}
-
-/** Internal: request-level options shared by every method. */
-export interface RequestOptionsShape {
-  signal?: AbortSignal;
 }
 
 /** PRD §8. */
@@ -544,6 +544,11 @@ export interface CorporateSplit {
 }
 
 export interface SharesOutstanding {
+  [field: string]: unknown;
+}
+
+/** `EARNINGS_ESTIMATES` payload; keys normalized. */
+export interface EarningsEstimates {
   [field: string]: unknown;
 }
 

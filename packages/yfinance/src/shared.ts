@@ -1,4 +1,4 @@
-/** Shared small helpers. */
+/** Shared small helpers (separate module to avoid import cycles). */
 
 import { ParseError } from "@marketkit/core";
 

@@ -3,7 +3,7 @@
  * payload-level classification (PRD §22) and response-meta extraction (§21).
  */
 
-import { MarketResponse, type ResponseMeta, Transport } from "@marketkit/core";
+import { type MarketResponse, type ResponseMeta, type Transport } from "@marketkit/core";
 
 import { field, isRecord, parseTimestamp, optionalString } from "./normalize.js";
 

@@ -5,9 +5,9 @@
  * global filings).
  */
 
-import { MarketResponse, ParseError, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, ParseError, type RequestOptions } from "@marketkit/core";
 
-import { envelope, FinnhubApi, meta, parseCandleColumns, parseTimestamp } from "./api.js";
+import { envelope, meta, parseCandleColumns, parseTimestamp, type FinnhubApi } from "./api.js";
 import type { Candle, ForexPairInput, IndicatorOptions, LooseData, RateRow } from "./types.js";
 import { deepNumeric, optionalString } from "./shared.js";
 import { RESOLUTION } from "./stocks.js";

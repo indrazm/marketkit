@@ -5,11 +5,13 @@
  * the `/stock/*` long tail via typed passthroughs.
  */
 
-import { MarketResponse, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, type RequestOptions } from "@marketkit/core";
 
-import { envelope, FinnhubApi, meta } from "./api.js";
+import { envelope, meta, type FinnhubApi } from "./api.js";
 import type { EarningsSurprise, LooseData, PriceTarget, Profile, Recommendation } from "./types.js";
 import { deepNumeric } from "./shared.js";
+
+type Meta = { provider: "finnhub"; fetchedAt: Date };
 
 export class FundamentalsNamespace {
   constructor(private readonly api: FinnhubApi) {}
@@ -77,7 +79,7 @@ export class FundamentalsNamespace {
     options: {
       symbol?: string;
       cik?: string;
-      freq?: "annual" | "quarterly" | " inception";
+      freq?: "annual" | "quarterly" | "inception";
     } & RequestOptions,
   ): Promise<MarketResponse<LooseData, Meta>> {
     const payload = await this.api.get(
@@ -283,12 +285,14 @@ export class FundamentalsNamespace {
     params: Record<string, string | number | boolean | undefined>,
     options?: RequestOptions,
   ): Promise<MarketResponse<LooseData, Meta>> {
-    const payload = await this.api.get(`stock/${endpoint}`, params, options);
+    const payload = await this.api.get(
+      `stock/${endpoint.replace(/^stock\//, "")}`,
+      params,
+      options,
+    );
     return envelope(deepNumeric(payload) as LooseData, meta());
   }
 }
-
-type Meta = { provider: "finnhub"; fetchedAt: Date };
 
 function asString(value: unknown): string | undefined {
   return typeof value === "string" && value !== "" ? value : undefined;

@@ -4,37 +4,11 @@
  * corporate actions (dividends, splits), ticker reference, and news.
  */
 
-import { MarketResponse, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, type RequestOptions } from "@marketkit/core";
 
-import { envelope, MassiveApi, parseAggBars, type AggBar } from "./api.js";
+import { envelope, meta, parseAggBars, resultsOf, type AggBar, type MassiveApi } from "./api.js";
 import type { AggsMeta, AggsOptions, LooseData, NewsArticle } from "./types.js";
 import { deepNumeric, optionalString } from "./shared.js";
-
-type Meta = {
-  provider: "massive";
-  fetchedAt: Date;
-  requestId?: string;
-  status?: string;
-  count?: number;
-  nextUrl?: string;
-};
-
-function meta(payload: unknown): Meta {
-  const record = (payload ?? {}) as Record<string, unknown>;
-  return {
-    provider: "massive",
-    fetchedAt: new Date(),
-    requestId: typeof record.request_id === "string" ? record.request_id : undefined,
-    status: typeof record.status === "string" ? record.status : undefined,
-    count: typeof record.count === "number" ? record.count : undefined,
-    nextUrl: typeof record.next_url === "string" ? record.next_url : undefined,
-  };
-}
-
-function resultsOf(payload: unknown): unknown[] {
-  const rows = (payload as { results?: unknown }).results;
-  return Array.isArray(rows) ? rows : [];
-}
 
 export class StocksNamespace {
   constructor(private readonly api: MassiveApi) {}

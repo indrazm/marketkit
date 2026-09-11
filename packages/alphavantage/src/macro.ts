@@ -4,9 +4,9 @@
  * `{ name, interval, unit, data: [{ date, value }] }`.
  */
 
-import { MarketResponse, ParseError, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, ParseError, type RequestOptions } from "@marketkit/core";
 
-import { AlphaVantageApi, AlphaVantageMetaFields, envelope } from "./api.js";
+import { type AlphaVantageApi, type AlphaVantageMetaFields, envelope } from "./api.js";
 import type {
   CpiOptions,
   CommodityHistoryOptions,

@@ -3,9 +3,9 @@
  * / MARKET_STATUS / REALTIME_BULK_QUOTES behind domain methods.
  */
 
-import { MarketResponse, ParseError, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, ParseError, type RequestOptions } from "@marketkit/core";
 
-import { AlphaVantageApi, AlphaVantageMetaFields, envelope, parseMeta } from "./api.js";
+import { type AlphaVantageApi, type AlphaVantageMetaFields, envelope, parseMeta } from "./api.js";
 import type {
   BidAskQuote,
   Candle,

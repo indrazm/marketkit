@@ -12,8 +12,8 @@
  */
 
 export * from "./client.js";
-export * from "./classify.js";
 export * from "./api.js";
+export * from "./classify.js";
 export * from "./shared.js";
 export * from "./types.js";
 export * from "./stocks.js";

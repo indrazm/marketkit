@@ -2,9 +2,9 @@
  * PRD §15: news domain — NEWS_SENTIMENT with substantially cleaned-up output.
  */
 
-import { MarketResponse, ParseError } from "@marketkit/core";
+import { type MarketResponse, ParseError } from "@marketkit/core";
 
-import { AlphaVantageApi, AlphaVantageMetaFields, envelope, parseMeta } from "./api.js";
+import { type AlphaVantageApi, type AlphaVantageMetaFields, envelope, parseMeta } from "./api.js";
 import type { NewsArticle, NewsSearchOptions } from "./types.js";
 import {
   describe,

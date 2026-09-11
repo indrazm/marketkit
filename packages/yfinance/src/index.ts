@@ -1,8 +1,8 @@
 /**
- * @marketdata/yfinance — type-safe Yahoo Finance SDK in the MarketKit style.
+ * @marketkit/yfinance — type-safe Yahoo Finance SDK in the MarketKit style.
  *
  * ```ts
- * import { YFinance } from "@marketdata/yfinance";
+ * import { YFinance } from "@marketkit/yfinance";
  *
  * const market = new YFinance({});
  * const { data } = await market.stocks.history("AAPL", {
@@ -12,8 +12,8 @@
  */
 
 export * from "./client.js";
-export * from "./classify.js";
 export * from "./api.js";
+export * from "./classify.js";
 export * from "./shared.js";
 export * from "./types.js";
 export * from "./stocks.js";

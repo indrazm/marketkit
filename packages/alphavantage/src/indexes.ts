@@ -3,9 +3,9 @@
  * index catalog utility.
  */
 
-import { MarketResponse, ParseError, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, ParseError, type RequestOptions } from "@marketkit/core";
 
-import { AlphaVantageApi, AlphaVantageMetaFields, envelope, parseMeta } from "./api.js";
+import { type AlphaVantageApi, type AlphaVantageMetaFields, envelope, parseMeta } from "./api.js";
 import type { IndexCandle, IndexEntry, IndexHistoryOptions, IndexInterval } from "./types.js";
 import { deepNormalize, isRecord, numeric, optionalNumber, parseTimestamp } from "./normalize.js";
 

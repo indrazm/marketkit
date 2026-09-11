@@ -3,9 +3,9 @@
  * "EUR/USD" strings are accepted and split.
  */
 
-import { MarketResponse, ParseError, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, ParseError, type RequestOptions } from "@marketkit/core";
 
-import { AlphaVantageApi, AlphaVantageMetaFields, envelope, parseMeta } from "./api.js";
+import { type AlphaVantageApi, type AlphaVantageMetaFields, envelope, parseMeta } from "./api.js";
 import type {
   Candle,
   ForexCandle,

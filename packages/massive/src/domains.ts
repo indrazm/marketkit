@@ -4,9 +4,9 @@
  * indicators (RSI/EMA/SMA/MACD), and economy.
  */
 
-import { MarketResponse, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, type RequestOptions } from "@marketkit/core";
 
-import { envelope, MassiveApi, parseAggBars, type AggBar } from "./api.js";
+import { envelope, meta, parseAggBars, resultsOf, type AggBar, type MassiveApi } from "./api.js";
 import type {
   AggsMeta,
   AggsOptions,
@@ -17,27 +17,6 @@ import type {
 } from "./types.js";
 import { deepNumeric, optionalString } from "./shared.js";
 
-type Meta = {
-  provider: "massive";
-  fetchedAt: Date;
-  requestId?: string;
-  status?: string;
-  count?: number;
-  nextUrl?: string;
-};
-
-function meta(payload: unknown): Meta {
-  const record = (payload ?? {}) as Record<string, unknown>;
-  return {
-    provider: "massive",
-    fetchedAt: new Date(),
-    requestId: typeof record.request_id === "string" ? record.request_id : undefined,
-    status: typeof record.status === "string" ? record.status : undefined,
-    count: typeof record.count === "number" ? record.count : undefined,
-    nextUrl: typeof record.next_url === "string" ? record.next_url : undefined,
-  };
-}
-
 function isTickerObject(payload: unknown): boolean {
   return (
     deepNumeric(payload) !== null &&
@@ -45,11 +24,6 @@ function isTickerObject(payload: unknown): boolean {
     !Array.isArray(payload) &&
     "ticker" in (payload as Record<string, unknown>)
   );
-}
-
-function resultsOf(payload: unknown): unknown[] {
-  const rows = (payload as { results?: unknown }).results;
-  return Array.isArray(rows) ? rows : [];
 }
 
 function mapInstruments(payload: unknown): Instrument[] {

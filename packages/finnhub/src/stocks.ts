@@ -3,9 +3,9 @@
  * peers, and the long tail of stock endpoints via typed passthroughs.
  */
 
-import { MarketResponse, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, type RequestOptions } from "@marketkit/core";
 
-import { envelope, FinnhubApi, meta, parseCandleColumns, parseTimestamp } from "./api.js";
+import { envelope, meta, parseCandleColumns, parseTimestamp, type FinnhubApi } from "./api.js";
 import type {
   Candle,
   FinnhubMeta,

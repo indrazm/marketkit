@@ -1,5 +1,5 @@
 {
-  "name": "@marketdata/massive",
+  "name": "@marketkit/massive",
   "version": "0.0.0",
   "files": [
     "dist"

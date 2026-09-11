@@ -3,9 +3,9 @@
  * the CSV calendars.
  */
 
-import { MarketResponse, ParseError, RequestOptions } from "@marketkit/core";
+import { type MarketResponse, ParseError, type RequestOptions } from "@marketkit/core";
 
-import { AlphaVantageApi, AlphaVantageMetaFields, envelope, parseMeta } from "./api.js";
+import { type AlphaVantageApi, type AlphaVantageMetaFields, envelope, parseMeta } from "./api.js";
 import type {
   CorporateAction,
   CorporateSplit,
@@ -13,6 +13,7 @@ import type {
   Earnings,
   EarningsCalendarEntry,
   EarningsCalendarOptions,
+  EarningsEstimates,
   EarningsReport,
   EtfProfile,
   FinancialReport,
@@ -212,9 +213,9 @@ export class FundamentalsNamespace {
   async earningsEstimates(
     symbol: string,
     options?: RequestOptions,
-  ): Promise<MarketResponse<SharesOutstanding, AlphaVantageMetaFields>> {
+  ): Promise<MarketResponse<EarningsEstimates, AlphaVantageMetaFields>> {
     const payload = await this.api.get({ function: "EARNINGS_ESTIMATES", symbol }, options);
-    return envelope(deepNormalize(payload) as SharesOutstanding, parseMeta(payload, symbol));
+    return envelope(deepNormalize(payload) as EarningsEstimates, parseMeta(payload, symbol));
   }
 
   /** `LISTING_STATUS` (CSV) — active or delisted symbols. */
