@@ -67,6 +67,16 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
 
+  packages/yfinance:
+    dependencies:
+      '@marketkit/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
+
 packages:
 
   '@oxfmt/binding-android-arm-eabi@0.67.0':

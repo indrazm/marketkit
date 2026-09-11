@@ -36,5 +36,4 @@ pnpm lint
 - Predictable errors: everything derives from `MarketKitError` (`AuthenticationError`, `RateLimitError`, `InvalidRequestError`, `NotFoundError`, `TimeoutError`, `NetworkError`, `ProviderError`, `ParseError`).
 - Responses come as a `MarketResponse { data, meta }` envelope with `provider` and `fetchedAt` metadata.
 - Numeric strings from providers are parsed into real `number`s; dates come back as `Date`.
-
-See [PRD.md](PRD.md) for the full product requirements and API design.
+- Keyless providers (Yahoo Finance) work with `new YFinance({})` — no API key needed.
